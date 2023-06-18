@@ -1,0 +1,27 @@
+import '../../../data/Model/category_model.dart';
+import '../../../data/Model/product_model.dart';
+
+abstract class ProductState{
+  final List<ProductModel> products;
+  ProductState(this.products);
+}
+
+class ProductInitialState extends ProductState{
+  ProductInitialState():super([]);
+}
+
+
+class ProductLoadingState extends ProductState{
+  ProductLoadingState(super.products);
+}
+
+class ProductLoadedState extends ProductState{
+  ProductLoadedState(super.products);
+}
+
+class ProductErrorState extends ProductState{
+  final String message;
+
+  ProductErrorState(super.products, this.message);
+
+}
