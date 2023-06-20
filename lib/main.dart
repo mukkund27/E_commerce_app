@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:e_com/logic/cubit/cart_cubit/cart_cubit.dart';
 import 'package:e_com/logic/cubit/category_cubit/category_cubit.dart';
 import 'package:e_com/logic/cubit/product_cubit/product_cubit.dart';
 import 'package:e_com/logic/cubit/user_cubit/user_cubit.dart';
@@ -35,6 +36,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ProductCubit(),
+
+        ),
+        BlocProvider(
+          create: (context) => CartCubit(BlocProvider.of<UserCubit>(context)),
 
         ),
       ],

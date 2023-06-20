@@ -14,7 +14,7 @@ const Map<String, dynamic> defaultHeaders = {
 };
 
 class Api {
-  final Dio _dio =Dio();
+  final Dio _dio = Dio();
 
   Api() {
     _dio.options.baseUrl = baseURl;
@@ -72,10 +72,11 @@ class ApiService {
     }
   }
 
-
   static Future<List<CategoryModel>> fetchAllCategory() async {
     try {
-      var response = await api.sendRequest.get("/category/allCategory",);
+      var response = await api.sendRequest.get(
+        "/category/allCategory",
+      );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       if (!apiResponse.success) {
@@ -83,16 +84,16 @@ class ApiService {
       }
 
       return (apiResponse.data as List<dynamic>).map((e) => CategoryModel.fromJson(e)).toList();
-
     } catch (ex) {
       rethrow;
     }
   }
-
 
   static Future<List<ProductModel>> fetchAllProduct() async {
     try {
-      var response = await api.sendRequest.get("/product/allProduct",);
+      var response = await api.sendRequest.get(
+        "/product/allProduct",
+      );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       if (!apiResponse.success) {
@@ -100,16 +101,16 @@ class ApiService {
       }
 
       return (apiResponse.data as List<dynamic>).map((e) => ProductModel.fromJson(e)).toList();
-
     } catch (ex) {
       rethrow;
     }
   }
-
 
   static Future<List<ProductModel>> fetchProductByCategory(String categoryId) async {
     try {
-      var response = await api.sendRequest.get("/product/productByCategory/$categoryId",);
+      var response = await api.sendRequest.get(
+        "/product/productByCategory/$categoryId",
+      );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       if (!apiResponse.success) {
@@ -117,61 +118,58 @@ class ApiService {
       }
 
       return (apiResponse.data as List<dynamic>).map((e) => ProductModel.fromJson(e)).toList();
-
     } catch (ex) {
       rethrow;
     }
   }
 
-  static Future<List<CartItemModel>> fetchCartForUSer(String userId) async {
+  static Future<List<CartModel>> fetchCartForUSer(String userId) async {
     try {
-      var response = await api.sendRequest.get("/cart/getUserCart/$userId",);
+      var response = await api.sendRequest.get(
+        "/cart/getUserCart/$userId",
+      );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       if (!apiResponse.success) {
         throw apiResponse.message.toString();
       }
 
-      return (apiResponse.data as List<dynamic>).map((e) => CartItemModel.fromJson(e)).toList();
-
+      return (apiResponse.data["items"] as List<dynamic>).map((e) => CartModel.fromJson(e)).toList();
     } catch (ex) {
       rethrow;
     }
   }
 
-  static Future<List<CartItemModel>> addToCart(CartItemModel cartItemModel,String userId) async {
+  static Future<List<CartModel>> addToCart(CartModel cartModel, String userId) async {
     try {
-      Map<String,dynamic> dataBody=cartItemModel.toJson();
-      dataBody["user"]=userId;
-      var response = await api.sendRequest.post("/cart/addToCart",data: jsonEncode(dataBody));
+
+      Map<String, dynamic> dataBody = cartModel.toJson();
+      dataBody["user"] = userId;
+      var response = await api.sendRequest.post("/cart/addToCart", data: jsonEncode(dataBody));
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (!apiResponse.success) {
+        throw apiResponse.message.toString();
+      }
+      return (apiResponse.data as List<dynamic>).map((e) => CartModel.fromJson(e)).toList();
+    } catch (ex) {
+      rethrow;
+    }
+  }
+
+  static Future<List<CartModel>> removeFromCart(String productId, String userId) async {
+    try {
+      Map<String, dynamic> dataBody = {"product": productId, "user": userId};
+      var response = await api.sendRequest.delete("/cart/removeFromCart", data: jsonEncode(dataBody));
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       if (!apiResponse.success) {
         throw apiResponse.message.toString();
       }
 
-      return (apiResponse.data as List<dynamic>).map((e) => CartItemModel.fromJson(e)).toList();
-
+      return (apiResponse.data as List<dynamic>).map((e) => CartModel.fromJson(e)).toList();
     } catch (ex) {
       rethrow;
     }
   }
-
-  static Future<List<CartItemModel>> removeFromCart(String productId,String userId) async {
-    try {
-      Map<String,dynamic> dataBody= {"product":productId,"user":userId};
-      var response = await api.sendRequest.delete("/cart/removeFromCart",data: jsonEncode(dataBody));
-      ApiResponse apiResponse = ApiResponse.fromResponse(response);
-
-      if (!apiResponse.success) {
-        throw apiResponse.message.toString();
-      }
-
-      return (apiResponse.data as List<dynamic>).map((e) => CartItemModel.fromJson(e)).toList();
-
-    } catch (ex) {
-      rethrow;
-    }
-  }
-
 }

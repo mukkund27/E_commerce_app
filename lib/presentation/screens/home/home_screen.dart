@@ -1,3 +1,4 @@
+import 'package:e_com/presentation/screens/cart/cart_screen.dart';
 import 'package:e_com/presentation/screens/home/category_screen.dart';
 import 'package:e_com/presentation/screens/home/profile_screen.dart';
 import 'package:e_com/presentation/screens/home/user_feed_screen.dart';
@@ -33,7 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
           "E-Commerce",
           style: TextStyle(color: Colors.black),
         ),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.cart_fill))],
+        actions: [IconButton(onPressed: () {
+          Navigator.pushNamed(context, CartScreen.routName);
+        }, icon: const Icon(CupertinoIcons.cart_fill))],
         elevation: 0,
         centerTitle: true,
       ),

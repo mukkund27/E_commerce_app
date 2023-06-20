@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_com/core/ui.dart';
 import 'package:e_com/data/Model/product_model.dart';
+import 'package:e_com/logic/cubit/cart_cubit/cart_cubit.dart';
 import 'package:e_com/logic/services/formater.dart';
 import 'package:e_com/presentation/widgets/gap_widget.dart';
 import 'package:e_com/presentation/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -58,6 +60,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     size: 10,
                   ),
                   PrimaryButton(text: "Add to cart",onPressed: () {
+                    BlocProvider.of<CartCubit>(context).addToCart(widget.productModel, 1);
 
                   },),
                   const GapWidget(
