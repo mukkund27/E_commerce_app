@@ -3,6 +3,7 @@ import 'package:e_com/core/ui.dart';
 import 'package:e_com/logic/cubit/cart_cubit/cart_cubit.dart';
 import 'package:e_com/logic/cubit/cart_cubit/cart_state.dart';
 import 'package:e_com/logic/services/total_calculation.dart';
+import 'package:e_com/presentation/widgets/link_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,10 +42,14 @@ class _CartScreenState extends State<CartScreen> {
                 child: Text(state.message.toString()),
               );
             }
-            return Column(
+
+            if(state is CartLoadedState && state.items.isEmpty){
+              return const Center(child: Text("Cart items will show up here..."),);
+            }
+            return Column(mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  child: ListView.builder(
+                  child: ListView.builder(shrinkWrap: true,
                     itemCount: state.items.length,
                     itemBuilder: (BuildContext context, int index) {
                       final item = state.items[index];
@@ -57,9 +62,17 @@ class _CartScreenState extends State<CartScreen> {
                           maxLines: 1,
                           style: TextStyles.body1,
                         ),
-                        subtitle: Text("${Formatter.formatPrice(item.product!.price!)} X ${item.quantity} = ${Formatter.formatPrice(
-                          item.product!.price! * item.quantity!,
-                        )}"),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${Formatter.formatPrice(item.product!.price!)} X ${item.quantity} = ${Formatter.formatPrice(
+                              item.product!.price! * item.quantity!,
+                            )}"),
+                            LinkButton(onPressed: () {
+                              BlocProvider.of<CartCubit>(context).removeFromCart(item.product!);
+                            },color: Colors.red, text: "Delete")
+                          ],
+                        ),
                         trailing: InputQty(
                             onQtyChanged: (value) {
                               BlocProvider.of<CartCubit>(context).addToCart(item.product!, value as int);
