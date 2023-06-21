@@ -134,7 +134,7 @@ class ApiService {
         throw apiResponse.message.toString();
       }
 
-      return (apiResponse.data["items"] as List<dynamic>).map((e) => CartModel.fromJson(e)).toList();
+      return (apiResponse.data as List<dynamic>).map((e) => CartModel.fromJson(e)).toList();
     } catch (ex) {
       rethrow;
     }
